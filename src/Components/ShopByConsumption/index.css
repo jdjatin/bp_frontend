@@ -1,0 +1,22 @@
+.bg-fade{
+    background-color: #F5F5F5;
+    padding-block: 40px;
+}
+.heading{
+    font-size: 16px;
+}
+.sub-heading{
+    font-size: 18px;
+}
+@media only screen and (min-width: 768px) {
+    .heading{
+        font-size: 28px;
+    }
+    .sub-heading{
+        font-size: 36px;
+    }
+    .random-container{
+        width: 80%;
+        margin: 0 auto;
+    }
+}

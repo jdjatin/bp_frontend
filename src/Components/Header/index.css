@@ -1,0 +1,22 @@
+.nav-link{
+    color: #B79BCA;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+.nav-link.active{
+    text-decoration: underline;
+    color: #278C92;
+}
+.icon{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #B79BCA;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+}
+.icon > svg{
+    fill: white;
+}

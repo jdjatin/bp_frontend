@@ -1,0 +1,31 @@
+.faq-banner{
+    border-radius: 16px;
+    margin-block: 20px;
+    height: 200px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+}
+.faq-button{
+    background-color: #DACCE4;
+}
+@media only screen and (min-width: 768px) {
+    .faq-banner{
+        height: 300px;
+        border-radius: 80px;
+    }
+    .text-container{
+        width: 60%;
+        padding-top: 80px;
+    }
+    h2{
+        font-size: 3rem;
+    }
+    .img-container{
+        width: 40%;
+        z-index: 0;
+        right: 0;
+    }
+    .img-container > img{
+        width: 100%;
+    }
+}
