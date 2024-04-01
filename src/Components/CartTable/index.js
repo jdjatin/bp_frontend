@@ -2,14 +2,53 @@ import React, { useEffect, useState } from 'react'
 import localStorageHandler from '../../utils/localStorage';
 import './index.css';
 import { addProduct, removeProduct } from '../ProductCard/helper';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+
+
 
 function CartTable() {
     const [cartList, setCartList] = useState([]);
-    useEffect(()=>{
+    const [total, setTotal] = useState(0);
+    const [isLoading, setIsLoading] = useState(false); // State for managing loading state
+
+    useEffect(() => {
         const ls = new localStorageHandler();
-        setCartList(ls.get('productCart') || []);
-    },[])
+        const items = ls.get('productCart') || [];
+        setCartList(items);
+        calculateTotal(items);
+    }, []);
+
+    const calculateTotal = (items) => {
+        const totalAmount = items.reduce((acc, item) => acc + item.price, 0);
+        setTotal(totalAmount);
+    };
+
+    const handlePayNow = () => {
+        setIsLoading(true); // Start loading
+        const API_URL = process.env.REACT_APP_API_URL;
+        axios.post(`${API_URL}payment/payment-link`, { amount: total }, {
+            headers: {
+                Authorization: `Bearer ${Cookies.get('accessToken')}`
+            }
+        })
+        .then(response => {
+            if (response.status === 200||201 && response.data) {
+                window.location.href = response.data; // Open the link on the same page
+            } else {
+                console.error("Payment link not received");
+            }
+        })
+        .catch(error => {
+            console.error("Error processing payment:", error);
+        })
+        .finally(() => {
+            setIsLoading(false); // End loading
+        });
+    };
+debugger;
   return (
+
     <div className='container'>
         {
             cartList.length > 0 ?
@@ -19,12 +58,14 @@ function CartTable() {
                         <tr>
                             <th className="th-lg">Products Name</th>
                             <th className="th-lg">Product Details</th>
+                            <th className="th-lg">Price</th>
                             <th className="th-lg">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
                             cartList.map((value, index)=>{
+                                console.log(value)
                                 return(
                                     <tr className='border-bottom py-3' key={value.id}>
                                         <td>
@@ -35,9 +76,9 @@ function CartTable() {
                                         </td>
                                         <td>
                                             {
-                                                value?.quantityTHC
+                                                value?.thc
                                                 ?
-                                                    <span>THC: {value.quantityTHC}</span>
+                                                    <span>THC: {value.thc}%</span>
                                                 :
                                                     null
                                             }
@@ -49,6 +90,12 @@ function CartTable() {
                                                 :
                                                     null
                                             }
+                                        </td>
+                                        <td>
+                                            <div className='d-flex gap-3'>
+                                                
+                                                <span className='product-name text-truncate'>${value.price}</span>
+                                            </div>    
                                         </td>
                                         <td className="wishlist-action">
                                             <button className='delete btn btn-outline-danger' onClick={()=>{
@@ -73,6 +120,14 @@ function CartTable() {
                         
                     </tbody>
                     </table>
+                    <div className="subtotal-section mt-4">
+                        <h5>Subtotal: ${total.toFixed(2)}</h5>
+                    </div>
+                    <div className="pay-now-section mt-3">
+                    <button className={`btn btn-primary ${isLoading ? 'processing' : ''}`} onClick={handlePayNow} disabled={isLoading}>
+                        {isLoading ? 'Processing...' : 'Pay Now'}
+                    </button>
+            </div>
             </div>
             :
             <div className='container text-center py-5'>

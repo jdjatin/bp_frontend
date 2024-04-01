@@ -12,6 +12,7 @@ import NoMatchFound from './Pages/NoMatchFound';
 import Signup from './Pages/Signup';
 import Login from './Pages/Login';
 import Product from './Pages/Product';
+import PaymentSuccess from './Pages/PaymentSuccess/PaymentSuccess'
 import { ToastContainer } from 'react-toastify';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="signup" element={<Signup />} />
           <Route path="login" element={<Login />} />
           <Route path="*" element={<NoMatchFound/>} />
+          <Route path="payment-success" element={<PaymentSuccess/>} />
         </Route>
         </Routes>
       </Router>

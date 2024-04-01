@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import './index.css';
 import { addProduct, removeProduct, checkItemExist } from './helper';
 import { Link } from 'react-router-dom';
+import { Tooltip } from 'react-bootstrap'; // Assuming you're using Bootstrap
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-function ProductCard({name ='', thc = '', id = '', price = ''}) {
+
+function ProductCard({ name = '', thc = '', id = '', price = '', category, description = '' }) {
+    const [showDescription, setShowDescription] = useState(false);
     const style = {
         backgroundColor: `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`
     }
@@ -22,24 +26,34 @@ function ProductCard({name ='', thc = '', id = '', price = ''}) {
         <p className='fw-bold mb-3'>
             {
                 thc ?
-                <span className='mb-3'>THC- {thc}</span>
+                <span className='mb-3'>THC- {thc}%</span>
                 :
                 null
             }
             {
                 price ? 
                 <div>
-                    Price: {price}
+                    Price: ${price}
+                </div>
+                :
+                null
+            }
+            {
+                category ?
+                <div>
+                    Category: {category.title}
                 </div>
                 :
                 null
             }
         </p>
+        
+       
         <div className='d-flex gap-3 justify-content-between shop-action'>
             <button className='wishlist btn btn-rounded btn-outline-light' 
                 onClick={()=>{
                     if(!isWishList){
-                        addProduct('productWishlist', {id,name,thc})
+                        addProduct('productWishlist', {id,name,thc, price})
                     } else{
                         removeProduct('productWishlist', id)
                     }
@@ -56,7 +70,7 @@ function ProductCard({name ='', thc = '', id = '', price = ''}) {
             </button>
             <button className='cart btn btn-outline-light'  onClick={()=>{
                     if(!isAddedIntoCart){
-                        addProduct('productCart', {id,name,thc,});
+                        addProduct('productCart', {id,name,thc,price});
                         setIsAddedIntoCart(!isAddedIntoCart);
                     } 
                 }}>

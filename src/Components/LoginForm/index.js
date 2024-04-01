@@ -1,39 +1,46 @@
 import React, { useRef } from 'react'
 import './index.css'
-import { Link } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 
 const APIURL = process.env.REACT_APP_API_URL;
 function LoginForm() {
     const emailRef = useRef();
     const passwordRef = useRef();
-    const handleSubmit= ()=>{
+    const navigate = useNavigate(); // Initialize useNavigate
+
+    const handleSubmit = () => {
         const email = emailRef.current.value;
         const password = passwordRef.current.value;
-        if(email !=='' && password !==''){
+
+        if (email !== '' && password !== '') {
             axios.post(`${APIURL}auth/login`, {
                 email,
                 password
-              })
-              .then(function (response) {
-                if(response.status === 200){
-                    if(response.data.accessToken){
+            })
+            .then(function (response) {
+                if (response.status === 200) {
+                    if (response.data.accessToken) {
                         toast.success("User logged in successfully!");
-                        Cookies.set('accessToken', response.data.accessToken)
+                        Cookies.set('accessToken', response.data.accessToken);
+                        navigate('/products'); // Redirect to /products
                     }
-                    if(response.data.refreshToken){
-                        Cookies.set('refreshToken', response.data.accessToken)
+                    if (response.data.refreshToken) {
+                        Cookies.set('refreshToken', response.data.refreshToken); // Fixed: was incorrectly setting accessToken again
                     }
                 }
-              })
-              .catch(function (error) {
-                toast.error("Some error Occured!");
+            })
+            .catch(function (error) {
+                const errorMessage = error.response?.data?.message || "Some error occurred!";
+                toast.error(errorMessage); // Show specific error message
                 console.log(error);
-              });
+            });
+        } else {
+            toast.error("Please fill in all required fields!");
         }
-    }
+    };
   return (
     <>
         <div className='d-flex justify-content-center align-items-center form-parent position-relative container'>
@@ -60,6 +67,10 @@ function LoginForm() {
                     <button type="button" className='w-100 btn btn-danger text-white btn-rounded' onClick={handleSubmit}>
                         Sign in
                     </button>
+                    <ToastContainer /> {/* Add ToastContainer to enable toast notifications */}
+            <div className='d-flex justify-content-center align-items-center form-parent position-relative container'>
+                {/* Your form JSX */}
+            </div>
                     <div className='d-flex align-items-center justify-content-center gap-3 my-3 w-100'>
                         <div className='line position-relative w-100 text-center'>or</div>
                     </div>

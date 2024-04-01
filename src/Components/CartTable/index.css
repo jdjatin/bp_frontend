@@ -3,3 +3,76 @@
         white-space: nowrap;
     }
 }
+
+/* Subtotal section styles */
+.subtotal-section {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subtotal-section h5 {
+    margin: 0;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Pay Now button styles */
+.pay-now-section {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pay-now-section .btn-primary {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.pay-now-section .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.pay-now-section .btn-primary:disabled {
+    background-color: #007bff;
+    opacity: 0.65;
+}
+
+/* Loader animation for the Pay Now button */
+.pay-now-section .btn-primary.processing {
+    pointer-events: none; /* Prevent further clicks */
+}
+
+.pay-now-section .btn-primary.processing::after {
+    content: '';
+    display: inline-block;
+    margin-left: 10px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    border-top: 2px solid #0000;
+    width: 14px;
+    height: 14px;
+    -webkit-animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
